@@ -25,24 +25,28 @@ public class CategoryController {
     @PostMapping("")
     public ResponseEntity<?> insertCategory(
             @Valid @RequestBody CategoryDto categoryDto,
-            BindingResult result){
-        if (result.hasErrors()){
-            List<String> errorMessage = result.getFieldErrors()
-                    .stream()
-                    .map(fieldError -> fieldError.getDefaultMessage())
-                    .toList();
-            return ResponseEntity.badRequest().body(errorMessage);
+            BindingResult result) {
+        try {
+            if (result.hasErrors()) {
+                List<String> errorMessage = result.getFieldErrors()
+                        .stream()
+                        .map(fieldError -> fieldError.getDefaultMessage())
+                        .toList();
+                return ResponseEntity.badRequest().body(errorMessage);
+            }
+            return ResponseEntity.ok("Product create successfully");
+        } catch (Exception e) {
+            return ResponseEntity.ok(categoryDto.toString());
         }
-        return ResponseEntity.ok(categoryDto.toString());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable Long id){
-        return ResponseEntity.ok("put oke with id " + id);
+    public ResponseEntity<String> updateCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok("put oke with id " + categoryId);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id){
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
         return ResponseEntity.ok("delete oke with id " + id);
     }
 }
