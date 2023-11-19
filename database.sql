@@ -70,18 +70,44 @@ ALTER TABLE `users`
 ADD FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)
 
 CREATE TABLE `orders` (
-	`order_id` int(11) NOT NULL AUTO_INCREMENT,
-    `user_id` int,
+	`order_id` int NOT NULL AUTO_INCREMENT,
+    `user_id` bigint NOT NULL,
     `full_name` varchar(100) DEFAULT NULL,
     `email` varchar(100) DEFAULT NULL,
     `phone_number` varchar(20) NOT NULL,
     `note` varchar(200) DEFAULT NULL,
     `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
     `status` varchar(20),
-    `total_money` float CHECK(total_money >= 0)
+    `total_money` float CHECK (total_money >= 0),
 	PRIMARY KEY (`order_id`),
-    FOREIGN KEY (`user_id`) REFERENCES users(`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES users(`user_id`)
 );
+
+ALTER TABLE `orders` ADD COLUMN `shipping_method` varchar(100) AFTER `total_money`
+ALTER TABLE `orders` ADD COLUMN `shipping_address` varchar(200) AFTER `shipping_method`
+ALTER TABLE `orders` ADD COLUMN `shipping_date` date AFTER `shipping_address`
+ALTER TABLE `orders` ADD COLUMN `tracking_number` varchar(100) AFTER `shiorder_detailspping_date`
+ALTER TABLE `orders` ADD COLUMN `payment_method` varchar(100) AFTER `tracking_number`
+ALTER TABLE `orders` ADD COLUMN `active` tinyint(1) AFTER `payment_method`
+ALTER TABLE `orders` 
+MODIFY COLUMN `status` ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled')
+
+CREATE TABLE `order_details` (
+	`order_detail_id` int not null auto_increment,
+    `order_id` int NOT NULL,
+    `product_id` int NOT NULL,
+    `price` float CHECK(price >=0),orders
+    `number_of_products` int CHECK (number_of_products > 0),
+    `total_money` float CHECK(total_money >= 0),
+    `color` varchar(20) DEFAULT NULL,
+    PRIMARY KEY (`order_detail_id`),
+    FOREIGN KEY (`order_id`) REFERENCES orders(`order_id`),
+    FOREIGN KEY (`product_id`) REFERENCES products(`product_id`)
+);
+
+
+
+
 
 
 
