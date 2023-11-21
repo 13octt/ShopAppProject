@@ -3,6 +3,7 @@ package com.sales.shopapp.service;
 import com.sales.shopapp.dto.CategoryDto;
 import com.sales.shopapp.model.Category;
 import com.sales.shopapp.repository.CategoryRepository;
+import com.sales.shopapp.service.implement.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,7 @@ public class CategoryService implements ICategoryService {
     public Category updateCategory(Long categoryId, CategoryDto categoryDto) {
         Category existsCategory = getCategoryById(categoryId);
         existsCategory.setName(categoryDto.getName());
+        categoryRepository.save(existsCategory);
         return existsCategory;
     }
 

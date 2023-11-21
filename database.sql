@@ -19,7 +19,7 @@ CREATE TABLE `users` (
     `is_active` tinyint DEFAULT 1,
     `date_of_birth` date NOT NULL,
     `facebook_account_id` int DEFAULT 0,
-    `google_acount_id` int DEFAULT 0,
+    `google_account_id` int DEFAULT 0,
     `role_id` bigint NOT NULL,
     PRIMARY KEY (`user_id`),
     FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)

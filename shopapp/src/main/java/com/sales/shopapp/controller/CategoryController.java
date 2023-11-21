@@ -1,6 +1,7 @@
 package com.sales.shopapp.controller;
 
 import com.sales.shopapp.dto.CategoryDto;
+import com.sales.shopapp.model.Category;
 import com.sales.shopapp.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,8 @@ public class CategoryController {
             @RequestParam("page") int page,
             @RequestParam("limit") int limit
     ) {
-        return ResponseEntity.ok(String.valueOf(page + limit));
+        List<Category> categoriesList = categoryService.getAllCategory();
+        return ResponseEntity.ok(categoriesList.toString());
     }
 
     @PostMapping("")
@@ -50,12 +52,16 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable Long categoryId) {
-        return ResponseEntity.ok("put oke with id " + categoryId);
+    public ResponseEntity<String> updateCategory(
+            @PathVariable("id") Long categoryId,
+            @Valid @RequestBody CategoryDto categoryDto) {
+        categoryService.updateCategory(categoryId, categoryDto);
+        return ResponseEntity.ok("Update category successfully with id: " + categoryId);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
-        return ResponseEntity.ok("delete oke with id " + id);
+    public ResponseEntity<String> deleteCategory(@PathVariable("id") Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.ok("Delete category successfully with id " + categoryId);
     }
 }
