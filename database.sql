@@ -3,7 +3,7 @@ CREATE DATABASE `shop_app`
 USE `shop_app`
 
 CREATE TABLE `roles` (
-	`role_id` int,
+	`role_id` bigint NOT NULL AUTO_INCREMENT,
     `name` varchar(20) NOT NULL,
     PRIMARY KEY (`role_id`)
 );
@@ -20,7 +20,7 @@ CREATE TABLE `users` (
     `date_of_birth` date NOT NULL,
     `facebook_account_id` int DEFAULT 0,
     `google_acount_id` int DEFAULT 0,
-    `role_id` int NOT NULL,
+    `role_id` bigint NOT NULL,
     PRIMARY KEY (`user_id`),
     FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)
 );

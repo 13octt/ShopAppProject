@@ -1,7 +1,9 @@
 package com.sales.shopapp.controller;
 
 import com.sales.shopapp.dto.CategoryDto;
+import com.sales.shopapp.service.CategoryService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -12,8 +14,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/categories")
+@RequiredArgsConstructor
+
 //@Validated
 public class CategoryController {
+
+    // Dependency Injection
+    private final CategoryService categoryService;
+
     @GetMapping("")
     public ResponseEntity<String> getAllCategories(
             @RequestParam("page") int page,
@@ -34,9 +42,10 @@ public class CategoryController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessage);
             }
+            categoryService.createCategory(categoryDto);
             return ResponseEntity.ok("Product create successfully");
         } catch (Exception e) {
-            return ResponseEntity.ok(categoryDto.toString());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

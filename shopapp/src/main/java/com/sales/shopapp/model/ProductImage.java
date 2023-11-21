@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Table(name = "product_images")
 @Entity
+@Builder
 public class ProductImage {
 
     @Id
@@ -17,7 +18,8 @@ public class ProductImage {
     @Column(name = "product_image_id")
     private int productImageId;
 
-    @Column(name = "product_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private Product productId;
 
     @Column(name = "image_url", nullable = false, length = 300)

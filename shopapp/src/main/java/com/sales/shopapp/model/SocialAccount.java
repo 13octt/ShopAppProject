@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "social_accounts")
+@Builder
 public class SocialAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +30,5 @@ public class SocialAccount {
     private String name;
 
     @Column(name = "user_id")
-    private String userId;
+    private Long userId;
 }
