@@ -16,10 +16,10 @@ public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_image_id")
-    private int productImageId;
+    private Long productImageId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne(targetEntity = Product.class)
+    @JoinColumn(name = "product_id")
     private Product productId;
 
     @Column(name = "image_url", nullable = false, length = 300)
