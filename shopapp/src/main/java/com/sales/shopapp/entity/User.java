@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "users")
@@ -13,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -28,7 +29,7 @@ public class User extends BaseEntity{
     @Column(name = "address", length = 200)
     private String address;
 
-    @Column(name = "password",length = 200, nullable = false)
+    @Column(name = "password", length = 200, nullable = false)
     private String password;
 
     @Column(name = "is_active")

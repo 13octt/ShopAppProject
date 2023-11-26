@@ -22,13 +22,13 @@ public class BaseEntity {
     private LocalDateTime updatedTime;
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         createdTime = LocalDateTime.now();
         updatedTime = LocalDateTime.now();
     }
 
     @PreUpdate
-    protected void onUpdate(){
+    protected void onUpdate() {
         updatedTime = LocalDateTime.now();
     }
 

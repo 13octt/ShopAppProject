@@ -5,6 +5,7 @@ import com.sales.shopapp.entity.Category;
 import com.sales.shopapp.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class CategoryController {
             if (result.hasErrors()) {
                 List<String> errorMessage = result.getFieldErrors()
                         .stream()
-                        .map(fieldError -> fieldError.getDefaultMessage())
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessage);
             }

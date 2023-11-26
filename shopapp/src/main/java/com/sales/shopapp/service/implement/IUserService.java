@@ -5,6 +5,7 @@ import com.sales.shopapp.entity.User;
 
 public interface IUserService {
     User createUser(UserDto userDto);
+
     User login(String userName, String password);
 
 }

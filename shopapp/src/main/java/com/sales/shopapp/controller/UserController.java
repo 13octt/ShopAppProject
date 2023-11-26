@@ -5,10 +5,10 @@ import com.sales.shopapp.dto.UserLoginDto;
 import com.sales.shopapp.service.implement.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +32,7 @@ public class UserController {
             if (result.hasErrors()) {
                 List<String> errorMessage = result.getFieldErrors()
                         .stream()
-                        .map(fieldError -> fieldError.getDefaultMessage())
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessage);
             }

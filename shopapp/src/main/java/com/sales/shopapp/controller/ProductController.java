@@ -118,6 +118,22 @@ public class ProductController {
         return ResponseEntity.ok(ProductResponse.fromProduct(existingProduct));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProductById(@PathVariable("id") Long productId, ProductDto productDto) {
+        // Check xem product with name co ton tai hay khong
+        String name = productDto.getName();
+        productService.existByName(name);
+        // Delete product with cai id do :)))
+
+        return ResponseEntity.ok("Update product successfully");
+    }
+
+    @PutMapping("/uploads/{id}")
+    public ResponseEntity<?> updateUploadProductById(@PathVariable("id") Long productId){
+
+        return ResponseEntity.ok("Update upload product images successfully");
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProductsById(@PathVariable("id") Long productId){
         try {

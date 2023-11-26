@@ -12,6 +12,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 public class ProductListResponse {
-     private List<ProductResponse> productResponseList;
-     private int totalPages;
+    private List<ProductResponse> productResponseList;
+    private int totalPages;
 }

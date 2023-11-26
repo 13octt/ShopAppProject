@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDetail{
+public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_detail_id")
@@ -20,10 +20,6 @@ public class OrderDetail{
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
-//    private Product product;
 
     @Column(name = "price", nullable = false)
     private Float price;

@@ -6,13 +6,14 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-public class BaseResponse  {
+public class BaseResponse {
     @JsonProperty("created_time")
     private LocalDateTime createTime;
 

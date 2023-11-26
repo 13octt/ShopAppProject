@@ -2,21 +2,18 @@ package com.sales.shopapp.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sales.shopapp.entity.Product;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductResponse extends BaseResponse{
+public class ProductResponse extends BaseResponse {
     @JsonProperty("name")
     private String name;
     @JsonProperty("price")
@@ -28,7 +25,7 @@ public class ProductResponse extends BaseResponse{
     @JsonProperty("category_id")
     private String categoryId;
 
-    public static ProductResponse fromProduct(Product product){
+    public static ProductResponse fromProduct(Product product) {
         ProductResponse productResponse = ProductResponse.builder()
                 .name(product.getName())
                 .price(product.getPrice())
