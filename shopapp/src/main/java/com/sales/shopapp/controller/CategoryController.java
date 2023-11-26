@@ -1,14 +1,12 @@
 package com.sales.shopapp.controller;
 
 import com.sales.shopapp.dto.CategoryDto;
-import com.sales.shopapp.model.Category;
+import com.sales.shopapp.entity.Category;
 import com.sales.shopapp.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -2,8 +2,8 @@ package com.sales.shopapp.service;
 
 import com.sales.shopapp.dto.UserDto;
 import com.sales.shopapp.exception.DataNotFoundException;
-import com.sales.shopapp.model.Role;
-import com.sales.shopapp.model.User;
+import com.sales.shopapp.entity.Role;
+import com.sales.shopapp.entity.User;
 import com.sales.shopapp.repository.RoleRepository;
 import com.sales.shopapp.repository.UserRepository;
 import com.sales.shopapp.service.implement.IUserService;

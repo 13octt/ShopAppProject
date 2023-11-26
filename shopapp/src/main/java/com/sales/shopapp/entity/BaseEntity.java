@@ -1,4 +1,4 @@
-package com.sales.shopapp.model;
+package com.sales.shopapp.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

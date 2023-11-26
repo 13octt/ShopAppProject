@@ -1,7 +1,6 @@
 package com.sales.shopapp.repository;
 
-import com.sales.shopapp.model.OrderDetail;
-import org.aspectj.weaver.ast.Or;
+import com.sales.shopapp.entity.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

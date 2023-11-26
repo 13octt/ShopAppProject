@@ -1,8 +1,7 @@
 package com.sales.shopapp.service.implement;
 
 import com.sales.shopapp.dto.UserDto;
-import com.sales.shopapp.model.User;
-import org.springframework.stereotype.Service;
+import com.sales.shopapp.entity.User;
 
 public interface IUserService {
     User createUser(UserDto userDto);

@@ -1,7 +1,7 @@
 package com.sales.shopapp.service;
 
 import com.sales.shopapp.dto.CategoryDto;
-import com.sales.shopapp.model.Category;
+import com.sales.shopapp.entity.Category;
 import com.sales.shopapp.repository.CategoryRepository;
 import com.sales.shopapp.service.implement.ICategoryService;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +14,6 @@ import java.util.List;
 public class CategoryService implements ICategoryService {
     private final CategoryRepository categoryRepository;
 
-    //RequireArgsConstructor
-//    public CategoryService(CategoryRepository categoryRepository){
-//        this.categoryRepository = categoryRepository;
-//    }
     @Override
     public Category createCategory(CategoryDto categoryDto) {
         Category newCategory = Category.builder()

@@ -1,9 +1,9 @@
-package com.sales.shopapp.model;
+package com.sales.shopapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -33,4 +33,7 @@ public class Product extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category categoryId;
+
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.REMOVE)
+    private List<ProductImage> images;
 }

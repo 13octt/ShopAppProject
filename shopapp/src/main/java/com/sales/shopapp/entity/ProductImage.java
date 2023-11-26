@@ -1,4 +1,4 @@
-package com.sales.shopapp.model;
+package com.sales.shopapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,13 +12,14 @@ import lombok.*;
 @Entity
 @Builder
 public class ProductImage {
-
+    public static final int MAXIMUM_IMAGES_PER_PRODUCT = 5;
+    public static final int MAXIMUM_IMAGES_SIZE = 10 * 1024 * 1024;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_image_id")
     private Long productImageId;
 
-    @ManyToOne(targetEntity = Product.class)
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product productId;
 

@@ -1,6 +1,6 @@
 package com.sales.shopapp.repository;
 
-import com.sales.shopapp.model.Order;
+import com.sales.shopapp.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

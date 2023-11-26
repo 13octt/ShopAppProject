@@ -1,6 +1,6 @@
 package com.sales.shopapp.repository;
 
-import com.sales.shopapp.model.User;
+import com.sales.shopapp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
