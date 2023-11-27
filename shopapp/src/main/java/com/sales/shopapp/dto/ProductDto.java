@@ -26,5 +26,5 @@ public class ProductDto {
     @JsonProperty("description")
     private String description;
     @JsonProperty("category_id")
-    private String categoryId;
+    private Long categoryId;
 }

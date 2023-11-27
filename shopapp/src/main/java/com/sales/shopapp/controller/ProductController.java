@@ -4,9 +4,6 @@ import com.sales.shopapp.dto.ProductDto;
 import com.sales.shopapp.dto.ProductImageDto;
 import com.sales.shopapp.entity.Product;
 import com.sales.shopapp.entity.ProductImage;
-import com.sales.shopapp.exception.DataNotFoundException;
-import com.sales.shopapp.repository.ProductImageRepository;
-import com.sales.shopapp.repository.ProductRepository;
 import com.sales.shopapp.response.ProductListResponse;
 import com.sales.shopapp.response.ProductResponse;
 import com.sales.shopapp.service.implement.IProductService;
@@ -35,7 +32,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductController {
     private final IProductService productService;
-    private final ProductImageRepository productImageRepository;
     @PostMapping("")
     public ResponseEntity<?> createProduct(
             @Valid @RequestBody ProductDto productDTO,
@@ -62,7 +58,7 @@ public class ProductController {
     ) {
         try {
             Product existingProduct = productService.getProductById(productId);
-            files = files == null ? new ArrayList<MultipartFile>() : files;
+            files = files == null ? new ArrayList<>() : files;
             if (files.size() > ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
                 return ResponseEntity.badRequest().body("You can only upload maximum 5 images");
             }
@@ -119,17 +115,15 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProductById(@PathVariable("id") Long productId, ProductDto productDto) {
-        // Check xem product with name co ton tai hay khong
-        String name = productDto.getName();
-        productService.existByName(name);
-        // Delete product with cai id do :)))
-
-        return ResponseEntity.ok("Update product successfully");
+    public ResponseEntity<?> updateProductById(@PathVariable("id") Long productId, @RequestBody ProductDto productDto) throws Exception {
+        Product updatedProduct = productService.updateProduct(productId, productDto);
+        return ResponseEntity.ok("Update product successfully with product id: " + productId + ", category id: " + productDto.getCategoryId());
     }
 
     @PutMapping("/uploads/{id}")
-    public ResponseEntity<?> updateUploadProductById(@PathVariable("id") Long productId){
+    public ResponseEntity<?> updateUploadProductById(
+            @PathVariable("id") Long productImageId,
+            @ModelAttribute MultipartFile files){
 
         return ResponseEntity.ok("Update upload product images successfully");
     }
@@ -149,7 +143,7 @@ public class ProductController {
             throw new IOException("Invalid image format");
         }
         String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
+        String uniqueFilename = UUID.randomUUID() + "_" + filename;
         java.nio.file.Path uploadDir = Paths.get("uploads");
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);

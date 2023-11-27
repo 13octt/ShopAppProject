@@ -29,7 +29,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product createProduct(ProductDto productDto) throws DataNotFoundException {
-        Category existingCategory = categoryRepository.findById(Long.valueOf(productDto.getCategoryId()))
+        Category existingCategory = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new DataNotFoundException
                         ("Can not find category with id: " + productDto.getCategoryId()));
 
@@ -59,13 +59,14 @@ public class ProductService implements IProductService {
         Product existingProduct = getProductById(productId);
         if (existingProduct != null) {
             // (Model Mapper)
-            Category existingCategory = categoryRepository.findById(Long.valueOf(productDto.getCategoryId())).
+            Category existingCategory = categoryRepository.findById(productDto.getCategoryId()).
                     orElseThrow(() -> new DataNotFoundException
                             ("Can not find category with id: " + productDto.getCategoryId()));
             existingProduct.setName(productDto.getName());
             existingProduct.setCategoryId(existingCategory);
             existingProduct.setDescription(productDto.getDescription());
             existingProduct.setThumbnail(productDto.getThumbnail());
+            existingProduct.setPrice(productDto.getPrice());
             return productRepository.save(existingProduct);
         }
         return null;

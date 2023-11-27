@@ -73,7 +73,7 @@ CREATE TABLE `orders` (
     `user_id` bigint NOT NULL,
     `full_name` varchar(100) DEFAULT NULL,
     `email` varchar(100) DEFAULT NULL,
-    `phone_number` varchar(20) NOT NULL,
+    `phone_number` varchar(20) DEFAULT NULL,
     `note` varchar(200) DEFAULT NULL,
     `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
     `status` ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled'),

@@ -1,29 +1,29 @@
-package com.sales.shopapp.dto;
-
+package com.sales.shopapp.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sales.shopapp.entity.User;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Data
-@Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
+public class OrderResponse extends BaseResponse{
     @JsonProperty("user_id")
-    @Min(value = 1, message = "User's ID must be greater than 0")
     private Long userId;
     @JsonProperty("full_name")
     private String fullName;
     @JsonProperty("email")
     private String email;
     @JsonProperty("phone_number")
-    @NotBlank(message = "Phone number is required")
     private String phoneNumber;
     @JsonProperty("note")
     private String note;
@@ -32,14 +32,13 @@ public class OrderDto {
     @JsonProperty("status")
     private String status;
     @JsonProperty("total_money")
-    @Min(value = 0, message = "Total money must be greater or equal than 0")
     private float totalMoney;
     @JsonProperty("shipping_method")
     private String shippingMethod;
     @JsonProperty("shipping_address")
     private String shippingAddress;
     @JsonProperty("shipping_date")
-    private LocalDate shippingDate;
+    private Date shippingDate;
     @JsonProperty("tracking_number")
     private int trackingNumber;
     @JsonProperty("payment_method")
