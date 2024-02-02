@@ -10,7 +10,10 @@ import com.sales.shopapp.service.implement.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,12 +21,13 @@ public class UserService implements IUserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @SneakyThrows
     @Override
     public User createUser(UserDto userDto) {
         String phoneNumber = userDto.getPhoneNumber();
-        if(userRepository.existsByPhoneNumber(phoneNumber)){
+        if (userRepository.existsByPhoneNumber(phoneNumber)) {
             throw new DataIntegrityViolationException("Phone number already exists");
         }
         User newUser = User.builder()
@@ -36,19 +40,23 @@ public class UserService implements IUserService {
                 .googleAccountId(userDto.getGoogleAccountId())
                 .build();
         Role role = roleRepository.findById(userDto.getRoleId())
-                    .orElseThrow(() -> new DataNotFoundException("Role not found"));
+                .orElseThrow(() -> new DataNotFoundException("Role not found"));
         newUser.setRoleId(role);
 
-        if(userDto.getFacebookAccountId() == 0 && userDto.getGoogleAccountId() == 0){
+        if (userDto.getFacebookAccountId() == 0 && userDto.getGoogleAccountId() == 0) {
             String password = userDto.getPassword();
-//            String encodedPassword = passwordEncoder.encode(password);
-//            newUser.setPassword(encodedPassword);
+            String encodedPassword = passwordEncoder.encode(password);
+            newUser.setPassword(encodedPassword);
         }
         return userRepository.save(newUser);
     }
 
     @Override
-    public User login(String userName, String password) {
-        return null;
+    public User login(String phoneNumber, String password) throws Exception {
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+        if (optionalUser.isEmpty()) {
+            throw new DataNotFoundException("Invalid phone number/password");
+        }
+        return optionalUser.get();
     }
 }
