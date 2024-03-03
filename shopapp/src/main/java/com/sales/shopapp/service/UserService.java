@@ -21,7 +21,7 @@ public class UserService implements IUserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     @SneakyThrows
     @Override
@@ -45,8 +45,8 @@ public class UserService implements IUserService {
 
         if (userDto.getFacebookAccountId() == 0 && userDto.getGoogleAccountId() == 0) {
             String password = userDto.getPassword();
-            String encodedPassword = passwordEncoder.encode(password);
-            newUser.setPassword(encodedPassword);
+//            String encodedPassword = passwordEncoder.encode(password);
+//            newUser.setPassword(encodedPassword);
         }
         return userRepository.save(newUser);
     }

@@ -17,10 +17,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtTokenUtil {
 
-    @Value("${jwt.expiration")
-    private Long expiration;
-    @Value("${jwt.secretKey")
-    private String secretKey;
+//    @Value("${jwt.expiration")
+//    private Long expiration;
+//    @Value("${jwt.secretKey")
+//    private String secretKey;
 //    public String generateToken(User user) throws Exception{
 //        Map<String, Object> claims = new HashMap<>();
 //        try{
