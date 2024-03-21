@@ -68,11 +68,11 @@ public class OrderDetailService implements IOrderDetailService {
 
     @Override
     public void deleteById(Long id) {
-
+        orderDetailRepository.deleteById(id);
     }
 
     @Override
     public List<OrderDetail> findByOrderId(Long orderId) {
-        return null;
+        return orderDetailRepository.findByOrderDetailId(orderId);
     }
 }
