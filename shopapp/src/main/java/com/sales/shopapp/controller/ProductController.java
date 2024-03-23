@@ -129,17 +129,17 @@ public class ProductController {
     @PutMapping("/uploads/{id}")
     public ResponseEntity<?> updateUploadProductById(
             @PathVariable("id") Long productImageId,
-            @ModelAttribute MultipartFile files){
+            @ModelAttribute MultipartFile files) {
 
         return ResponseEntity.ok("Update upload product images successfully");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProductsById(@PathVariable("id") Long productId){
+    public ResponseEntity<String> deleteProductsById(@PathVariable("id") Long productId) {
         try {
             productService.deleteProduct(productId);
             return ResponseEntity.ok("Delete product with id: " + productId);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -169,15 +169,16 @@ public class ProductController {
         Faker faker = new Faker();
         for (int i = 0; i < 5000; i++) {
             String productName = faker.commerce().productName();
-            if(productService.existByName(productName)) {
+            String productThumbnail = "https://productname.com";
+            if (productService.existByName(productName)) {
                 continue;
             }
             ProductDto productDTO = ProductDto.builder()
                     .name(productName)
-                    .price((float)faker.number().numberBetween(10, 90_000_000))
+                    .price((float) faker.number().numberBetween(10, 90_000_000))
                     .description(faker.lorem().sentence(10))
-                    .thumbnail("")
-                    .categoryId((long)faker.number().numberBetween(3, 4))
+                    .thumbnail(productThumbnail)
+                    .categoryId((long) faker.number().numberBetween(3, 4))
                     .build();
             try {
                 productService.createProduct(productDTO);

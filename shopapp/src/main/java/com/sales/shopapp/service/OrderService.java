@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +37,14 @@ public class OrderService implements IOrderService {
         order.setUserId(user);
         order.setOrderDate(new Date());
         order.setStatus(OrderStatus.PENDING);
-
+        LocalDate shippingDate = orderDto.getShippingDate() == null
+                ? LocalDate.now() : orderDto.getShippingDate();
+        if (shippingDate.isBefore(LocalDate.now())) {
+            throw new DataNotFoundException("Date must be at least today !");
+        }
+        order.setShippingDate(shippingDate);
+        order.setActive(true);
+        orderRepository.save(order);
         return order;
     }
 
@@ -71,9 +79,9 @@ public class OrderService implements IOrderService {
         }
     }
 
-    @Override
-    public List<Order> findByUserId(Long userId) {
-//        return orderRepository.findByUserId(userId);
-        return null;
-    }
+//    @Override
+//    public List<Order> findByUserId(Long userId) {
+////        return orderRepository.findByUserId(userId);
+//        return orderRepository.findByUser_Id(userId);
+//    }
 }

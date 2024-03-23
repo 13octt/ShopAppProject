@@ -40,6 +40,7 @@ public class ProductService implements IProductService {
                 .name(productDto.getName())
                 .price(productDto.getPrice())
                 .thumbnail(productDto.getThumbnail())
+                .description(productDto.getDescription())
                 .categoryId(existingCategory)
                 .build();
 

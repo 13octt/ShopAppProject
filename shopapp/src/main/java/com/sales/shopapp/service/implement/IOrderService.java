@@ -2,6 +2,7 @@ package com.sales.shopapp.service.implement;
 
 import com.sales.shopapp.dto.OrderDto;
 import com.sales.shopapp.entity.Order;
+import com.sales.shopapp.entity.User;
 import com.sales.shopapp.exception.DataNotFoundException;
 import com.sales.shopapp.response.OrderResponse;
 
@@ -16,5 +17,5 @@ public interface IOrderService {
     Order updateOrder(Long id, OrderDto orderDto) throws DataNotFoundException;
 
     void deleteOrder(Long orderId);
-    List<Order> findByUserId(Long userId);
+//    List<Order> findByUserId(Long userId);
 }

@@ -2,6 +2,7 @@ package com.sales.shopapp.controller;
 
 import com.sales.shopapp.dto.OrderDto;
 import com.sales.shopapp.entity.Order;
+import com.sales.shopapp.response.OrderResponse;
 import com.sales.shopapp.service.implement.IOrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,14 +36,15 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/user/{user_id}")
-    public ResponseEntity<?> getOrders(@Valid @PathVariable("user_id") Long userId) {
-        try {
-            return ResponseEntity.ok("Get order by id" + userId);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+//    @GetMapping("/user/{user_id}")
+//    public ResponseEntity<?> getOrders(@Valid @PathVariable("user_id") Long userId) {
+//        try {
+//            List<Order> orderList = orderService.findByUserId(userId);
+//            return ResponseEntity.ok(orderList);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrder(@Valid @PathVariable("id") Long orderId) {
