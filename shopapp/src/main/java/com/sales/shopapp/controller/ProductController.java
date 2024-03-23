@@ -1,5 +1,6 @@
 package com.sales.shopapp.controller;
 
+import com.github.javafaker.Faker;
 import com.sales.shopapp.dto.ProductDto;
 import com.sales.shopapp.dto.ProductImageDto;
 import com.sales.shopapp.entity.Product;
@@ -28,10 +29,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("${api.prefix}/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final IProductService productService;
+
     @PostMapping("")
     public ResponseEntity<?> createProduct(
             @Valid @RequestBody ProductDto productDTO,
@@ -115,9 +117,13 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProductById(@PathVariable("id") Long productId, @RequestBody ProductDto productDto) throws Exception {
+    public ResponseEntity<?> updateProductById(
+            @PathVariable("id") Long productId,
+            @RequestBody ProductDto productDto)
+            throws Exception {
         Product updatedProduct = productService.updateProduct(productId, productDto);
-        return ResponseEntity.ok("Update product successfully with product id: " + productId + ", category id: " + productDto.getCategoryId());
+        return ResponseEntity.ok("Update product successfully with product id: " + productId
+                + ", category id: " + productDto.getCategoryId());
     }
 
     @PutMapping("/uploads/{id}")
@@ -156,6 +162,30 @@ public class ProductController {
     private boolean isImagesFile(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && contentType.startsWith("image/");
+    }
+
+    @PostMapping("/generateFakeProducts")
+    public ResponseEntity<String> generateFakeProducts() {
+        Faker faker = new Faker();
+        for (int i = 0; i < 5000; i++) {
+            String productName = faker.commerce().productName();
+            if(productService.existByName(productName)) {
+                continue;
+            }
+            ProductDto productDTO = ProductDto.builder()
+                    .name(productName)
+                    .price((float)faker.number().numberBetween(10, 90_000_000))
+                    .description(faker.lorem().sentence(10))
+                    .thumbnail("")
+                    .categoryId((long)faker.number().numberBetween(3, 4))
+                    .build();
+            try {
+                productService.createProduct(productDTO);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }
+        return ResponseEntity.ok("Fake Products created successfully");
     }
 
 }

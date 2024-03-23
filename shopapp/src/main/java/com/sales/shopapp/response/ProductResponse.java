@@ -25,16 +25,16 @@ public class ProductResponse extends BaseResponse {
     @JsonProperty("category_id")
     private String categoryId;
 
-    public static ProductResponse fromProduct(Product product) {
+    public static ProductResponse fromProduct(Product productDto) {
         ProductResponse productResponse = ProductResponse.builder()
-                .name(product.getName())
-                .price(product.getPrice())
-                .thumbnail(product.getThumbnail())
-                .description(product.getDescription())
-                .categoryId(product.getCategoryId().getCategoryId().toString())
+                .name(productDto.getName())
+                .price(productDto.getPrice())
+                .thumbnail(productDto.getThumbnail())
+                .description(productDto.getDescription())
+                .categoryId(productDto.getCategoryId().getCategoryId().toString())
                 .build();
-        productResponse.setCreateTime(product.getCreatedTime());
-        productResponse.setUpdatedTime(LocalDate.from(product.getUpdatedTime()));
+        productResponse.setCreateTime(productDto.getCreatedTime());
+        productResponse.setUpdatedTime(LocalDate.from(productDto.getUpdatedTime()));
         return productResponse;
     }
 

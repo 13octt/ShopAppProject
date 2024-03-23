@@ -13,8 +13,10 @@ import com.sales.shopapp.repository.ProductRepository;
 import com.sales.shopapp.response.ProductResponse;
 import com.sales.shopapp.service.implement.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,6 +28,7 @@ public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductImageRepository productImageRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Product createProduct(ProductDto productDto) throws DataNotFoundException {
@@ -56,18 +59,23 @@ public class ProductService implements IProductService {
 
     @Override
     public Product updateProduct(Long productId, ProductDto productDto) throws DataNotFoundException {
-        Product existingProduct = getProductById(productId);
-        if (existingProduct != null) {
+        Product product = getProductById(productId);
+        if (product != null) {
             // (Model Mapper)
             Category existingCategory = categoryRepository.findById(productDto.getCategoryId()).
                     orElseThrow(() -> new DataNotFoundException
                             ("Can not find category with id: " + productDto.getCategoryId()));
-            existingProduct.setName(productDto.getName());
-            existingProduct.setCategoryId(existingCategory);
-            existingProduct.setDescription(productDto.getDescription());
-            existingProduct.setThumbnail(productDto.getThumbnail());
-            existingProduct.setPrice(productDto.getPrice());
-            return productRepository.save(existingProduct);
+
+            modelMapper.typeMap(ProductDto.class, Product.class)
+                    .addMappings(mapper -> mapper.skip(Product::setProductId));
+            modelMapper.map(productDto, product);
+
+//            existingProduct.setName(productDto.getName());
+            product.setCategoryId(existingCategory);
+//            existingProduct.setDescription(productDto.getDescription());
+//            existingProduct.setThumbnail(productDto.getThumbnail());
+//            existingProduct.setPrice(productDto.getPrice());
+            return productRepository.save(product);
         }
         return null;
     }
