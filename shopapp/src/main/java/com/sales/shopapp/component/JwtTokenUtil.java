@@ -27,9 +27,9 @@ import java.util.function.Function;
 @Slf4j
 public class JwtTokenUtil {
     @Value("${jwt.expiration}")
-    int expiration;
+    static int expiration;
     @Value("${jwt.secretKey}")
-    String secretKey;
+    static String secretKey;
 
     public String generateToken(User user) throws DataNotFoundException {
         Map<String, Object> claims = new HashMap<>();

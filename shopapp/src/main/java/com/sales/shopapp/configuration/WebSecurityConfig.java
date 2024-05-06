@@ -2,12 +2,7 @@ package com.sales.shopapp.configuration;
 
 import com.sales.shopapp.enums.RoleEnum;
 import com.sales.shopapp.filter.JwtTokenFilter;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +21,7 @@ public class WebSecurityConfig {
     private final JwtTokenFilter jwtTokenFilter;
 
     @Value("${api.prefix}")
-    String apiPrefix;
+    static String apiPrefix;
 
     String[] publicEndpoints = {
             String.format("%s/users/register", apiPrefix),
