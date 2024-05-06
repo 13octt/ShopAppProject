@@ -87,10 +87,6 @@ Fshopapp/src/main/java/com/sales/shopapp/repository/UserRepository.java,1\b\1bd
 Oshopapp/src/main/java/com/sales/shopapp/service/implement/ICategoryService.java,4\9\49aa21d0ef32819a8553bc891eea74f163dd9532
 |
 Lshopapp/src/main/java/com/sales/shopapp/service/implement/IOrderService.java,a\3\a356197c1ba5af8d5f86ec8f6e6fa70aa48cb4f9
-k
-;shopapp/src/main/java/com/sales/shopapp/exception/Role.java,7\6\7644ee85f73ccd47d9f4f15d880644ed289a4bb1
-g
-7shopapp/src/main/java/com/sales/shopapp/enums/Role.java,5\d\5d18b34352f76c24b11aeed6df817fb275469c1a
 |
 Lshopapp/src/main/java/com/sales/shopapp/exception/DataNotFoundException.java,3\4\34a1a1698b012bdf995f64b317a508e360b92695
 €
