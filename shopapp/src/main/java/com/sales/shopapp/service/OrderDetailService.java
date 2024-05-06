@@ -71,8 +71,8 @@ public class OrderDetailService implements IOrderDetailService {
         orderDetailRepository.deleteById(id);
     }
 
-    @Override
-    public List<OrderDetail> findByOrderId(Long orderId) {
-        return orderDetailRepository.findByOrderDetailId(orderId);
-    }
+//    @Override
+//    public List<OrderDetail> findByOrderId(Long orderId) {
+//        return orderDetailRepository.findByOrderId(orderId);
+//    }
 }

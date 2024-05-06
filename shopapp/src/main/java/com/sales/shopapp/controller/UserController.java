@@ -1,7 +1,9 @@
 package com.sales.shopapp.controller;
 
-import com.sales.shopapp.dto.UserDto;
+import com.sales.shopapp.dto.request.UserDto;
 import com.sales.shopapp.dto.UserLoginDto;
+import com.sales.shopapp.dto.response.LoginResponse;
+import com.sales.shopapp.entity.User;
 import com.sales.shopapp.service.implement.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +28,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(
             @Valid @RequestBody UserDto userDto,
-            BindingResult result)
-    {
+            BindingResult result) {
         try {
             if (result.hasErrors()) {
                 List<String> errorMessage = result.getFieldErrors()
@@ -39,16 +40,22 @@ public class UserController {
             if (!userDto.getPassword().equals(userDto.getRetypePassword())) {
                 return ResponseEntity.badRequest().body("Password does not match");
             }
-            userService.createUser(userDto);
-            return ResponseEntity.ok("Register successfully");
+            User user = userService.createUser(userDto);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
-        String token = String.valueOf(userService.login(userLoginDto.getPhoneNumber(), userLoginDto.getPassword()));
-        return ResponseEntity.ok(token);
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) {
+        try {
+            String token = String.valueOf(userService.login(userLoginDto.getPhoneNumber(), userLoginDto.getPassword()));
+            return ResponseEntity.ok(LoginResponse.builder()
+                    .token(token)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

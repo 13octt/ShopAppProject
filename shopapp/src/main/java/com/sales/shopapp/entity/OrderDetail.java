@@ -5,7 +5,7 @@ import lombok.*;
 
 @Table(name = "order_details")
 @Entity
-@Data
+//@Data
 @Getter
 @Setter
 @AllArgsConstructor
@@ -36,4 +36,7 @@ public class OrderDetail {
 
     @Column(name = "color")
     private String color;
+//
+//    @ManyToOne
+//    @JoinColumn
 }

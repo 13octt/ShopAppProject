@@ -1,30 +1,40 @@
 package com.sales.shopapp.service;
 
-import com.sales.shopapp.dto.UserDto;
-import com.sales.shopapp.exception.DataNotFoundException;
+import com.sales.shopapp.component.JwtTokenUtil;
+import com.sales.shopapp.dto.request.UserDto;
 import com.sales.shopapp.entity.Role;
+import com.sales.shopapp.exception.DataNotFoundException;
+import com.sales.shopapp.enums.RoleEnum;
 import com.sales.shopapp.entity.User;
+import com.sales.shopapp.exception.PermissionDeniedException;
 import com.sales.shopapp.repository.RoleRepository;
 import com.sales.shopapp.repository.UserRepository;
 import com.sales.shopapp.service.implement.IUserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.experimental.FieldDefaults;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService implements IUserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-//    private final PasswordEncoder passwordEncoder;
+    UserRepository userRepository;
+    RoleRepository roleRepository;
+    PasswordEncoder passwordEncoder;
+    JwtTokenUtil jwtTokenUtil;
+    AuthenticationManager authenticationManager;
 
-    @SneakyThrows
     @Override
-    public User createUser(UserDto userDto) {
+    public User createUser(UserDto userDto) throws Exception {
         String phoneNumber = userDto.getPhoneNumber();
         if (userRepository.existsByPhoneNumber(phoneNumber)) {
             throw new DataIntegrityViolationException("Phone number already exists");
@@ -40,22 +50,33 @@ public class UserService implements IUserService {
                 .build();
         Role role = roleRepository.findById(userDto.getRoleId())
                 .orElseThrow(() -> new DataNotFoundException("Role not found"));
+        if(role.getName().toUpperCase().equals(RoleEnum.ADMIN.toString())){
+            throw new PermissionDeniedException("You cannot register an admin account");
+        }
         newUser.setRoleId(role);
 
         if (userDto.getFacebookAccountId() == 0 && userDto.getGoogleAccountId() == 0) {
             String password = userDto.getPassword();
-//            String encodedPassword = passwordEncoder.encode(password);
-//            newUser.setPassword(encodedPassword);
+            String encodedPassword = passwordEncoder.encode(password);
+            newUser.setPassword(encodedPassword);
         }
         return userRepository.save(newUser);
     }
 
     @Override
-    public User login(String phoneNumber, String password) throws Exception {
+    public String login(String phoneNumber, String password) throws Exception {
         Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
         if (optionalUser.isEmpty()) {
             throw new DataNotFoundException("Invalid phone number/password");
         }
-        return optionalUser.get();
+        User existingUser = optionalUser.get();
+        if (existingUser.getFacebookAccountId() == 0 && existingUser.getGoogleAccountId() == 0
+                && !passwordEncoder.matches(password, existingUser.getPassword())) {
+            throw new BadCredentialsException("Wrong phone number/password");
+        }
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(phoneNumber, password, existingUser.getAuthorities());
+        authenticationManager.authenticate(auth);
+        return jwtTokenUtil.generateToken(existingUser);
     }
 }

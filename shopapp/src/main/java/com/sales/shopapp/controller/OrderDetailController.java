@@ -25,18 +25,18 @@ public class OrderDetailController {
         return ResponseEntity.ok().body(OrderDetailResponse.fromOrderDetail(orderDetail));
     }
 
-    @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> getOrderDetailById(@Valid @PathVariable("orderId") Long orderId) {
-        List<OrderDetail> orderDetails = orderDetailService.findByOrderId(orderId);
-        List<OrderDetailResponse> orderDetailResponses = orderDetails
-                .stream()
-                .map(OrderDetailResponse::fromOrderDetail)
-                .toList();
-        return ResponseEntity.ok(orderDetailResponses);
-    }
+//    @GetMapping("/order/{orderId}")
+//    public ResponseEntity<?> getOrderDetailById(@Valid @PathVariable("orderId") Long orderId) {
+//        List<OrderDetail> orderDetails = orderDetailService.findByOrderId(orderId);
+//        List<OrderDetailResponse> orderDetailResponses = orderDetails
+//                .stream()
+//                .map(OrderDetailResponse::fromOrderDetail)
+//                .toList();
+//        return ResponseEntity.ok(orderDetailResponses);
+//    }
 
     @PostMapping("")
-    public ResponseEntity<?> createOrderDetail(@Valid OrderDetailDto orderDetailDto) {
+    public ResponseEntity<?> createOrderDetail(@Valid @RequestBody OrderDetailDto orderDetailDto) {
         try {
             OrderDetail newOrderDetail = orderDetailService.createOrderDetail(orderDetailDto);
             return ResponseEntity.ok().body(OrderDetailResponse.fromOrderDetail(newOrderDetail));

@@ -1,41 +1,50 @@
 package com.sales.shopapp.configuration;
 
 import com.sales.shopapp.repository.UserRepository;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-//@EnableWebSecurity
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig {
 
-    private final UserRepository userRepository;
+    UserRepository userRepository;
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return phoneNumber -> {
-//            userRepository
-//                    .findByPhoneNumber(phoneNumber)
-//                    .orElseThrow(() -> new UsernameNotFoundException(
-//                            "Can't find user with phone number = " + phoneNumber
-//                    ));
-//            return existingUser;
-//        }
-//    }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return phoneNumber -> userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Cannot find user with phone number " + phoneNumber));
+    }
 
-//    @Bean
-//    @Deprecated(since = "6.1", forRemoval = true)
-//    protected SecurityFilterChain configure (HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.authorizeHttpRequests()
-//                .requestMatchers(HttpMethod.POST, "/users")
-//                .permitAll();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+            throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 }

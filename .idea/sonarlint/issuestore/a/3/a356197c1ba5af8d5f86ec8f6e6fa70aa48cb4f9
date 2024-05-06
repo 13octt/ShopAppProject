@@ -1,0 +1,9 @@
+
+[	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ôŞ€Ø
+V	java:S125"<This block of commented-out lines of code should be removed.(ıŠƒøÿÿÿÿ
+U
+java:S1128":Remove this unused import 'com.sales.shopapp.entity.User'.(‡¾’ÿÿÿÿÿ
+[
+java:S1128"ERemove this unused import 'com.sales.shopapp.response.OrderResponse'.(ÇØ£
+F
+java:S1128	"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ
