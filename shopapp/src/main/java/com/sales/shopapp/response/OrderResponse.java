@@ -1,22 +1,15 @@
 package com.sales.shopapp.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sales.shopapp.entity.User;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderResponse extends BaseResponse{
+public class OrderResponse extends BaseResponse {
     @JsonProperty("user_id")
     private Long userId;
     @JsonProperty("full_name")

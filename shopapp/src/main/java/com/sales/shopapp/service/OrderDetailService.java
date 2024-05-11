@@ -1,6 +1,6 @@
 package com.sales.shopapp.service;
 
-import com.sales.shopapp.dto.OrderDetailDto;
+import com.sales.shopapp.dto.request.OrderDetailDto;
 import com.sales.shopapp.entity.Order;
 import com.sales.shopapp.entity.OrderDetail;
 import com.sales.shopapp.entity.Product;
@@ -9,10 +9,9 @@ import com.sales.shopapp.repository.OrderDetailRepository;
 import com.sales.shopapp.repository.OrderRepository;
 import com.sales.shopapp.repository.ProductRepository;
 import com.sales.shopapp.service.implement.IOrderDetailService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 
@@ -24,6 +23,7 @@ public class OrderDetailService implements IOrderDetailService {
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     public OrderDetail createOrderDetail(OrderDetailDto orderDetailDto) throws Exception {
         Order order = orderRepository.findById(orderDetailDto.getOrderId())
                 .orElseThrow(() -> new DataNotFoundException(
@@ -49,6 +49,7 @@ public class OrderDetailService implements IOrderDetailService {
     }
 
     @Override
+    @Transactional
     public OrderDetail updateOrderDetail(Long id, OrderDetailDto orderDetailDto) throws DataNotFoundException {
         OrderDetail existingOrderDetail = orderDetailRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find order detail with id: " + id));
@@ -67,6 +68,7 @@ public class OrderDetailService implements IOrderDetailService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         orderDetailRepository.deleteById(id);
     }

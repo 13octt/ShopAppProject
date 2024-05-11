@@ -1,4 +1,4 @@
-package com.sales.shopapp.dto;
+package com.sales.shopapp.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;

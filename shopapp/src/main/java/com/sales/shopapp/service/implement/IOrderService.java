@@ -1,12 +1,8 @@
 package com.sales.shopapp.service.implement;
 
-import com.sales.shopapp.dto.OrderDto;
+import com.sales.shopapp.dto.request.OrderDto;
 import com.sales.shopapp.entity.Order;
-import com.sales.shopapp.entity.User;
 import com.sales.shopapp.exception.DataNotFoundException;
-import com.sales.shopapp.response.OrderResponse;
-
-import java.util.List;
 
 public interface IOrderService {
 

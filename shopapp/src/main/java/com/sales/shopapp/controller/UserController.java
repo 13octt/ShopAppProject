@@ -1,7 +1,7 @@
 package com.sales.shopapp.controller;
 
 import com.sales.shopapp.dto.request.UserDto;
-import com.sales.shopapp.dto.UserLoginDto;
+import com.sales.shopapp.dto.request.UserLoginDto;
 import com.sales.shopapp.dto.response.LoginResponse;
 import com.sales.shopapp.entity.User;
 import com.sales.shopapp.service.implement.IUserService;
@@ -52,6 +52,7 @@ public class UserController {
         try {
             String token = String.valueOf(userService.login(userLoginDto.getPhoneNumber(), userLoginDto.getPassword()));
             return ResponseEntity.ok(LoginResponse.builder()
+                    .message("Login successfully")
                     .token(token)
                     .build());
         } catch (Exception e) {

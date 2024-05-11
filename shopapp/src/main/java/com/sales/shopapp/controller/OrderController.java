@@ -1,6 +1,6 @@
 package com.sales.shopapp.controller;
 
-import com.sales.shopapp.dto.OrderDto;
+import com.sales.shopapp.dto.request.OrderDto;
 import com.sales.shopapp.entity.Order;
 import com.sales.shopapp.service.implement.IOrderService;
 import jakarta.validation.Valid;

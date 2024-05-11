@@ -1,6 +1,6 @@
 package com.sales.shopapp.controller;
 
-import com.sales.shopapp.dto.OrderDetailDto;
+import com.sales.shopapp.dto.request.OrderDetailDto;
 import com.sales.shopapp.entity.OrderDetail;
 import com.sales.shopapp.exception.DataNotFoundException;
 import com.sales.shopapp.response.OrderDetailResponse;
@@ -9,8 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/order-details")

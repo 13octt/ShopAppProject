@@ -1,6 +1,5 @@
 package com.sales.shopapp.entity;
 
-import lombok.RequiredArgsConstructor;
 
 public class OrderStatus {
     public static final String PENDING = "pending";

@@ -1,8 +1,8 @@
 package com.sales.shopapp.controller;
 
 import com.github.javafaker.Faker;
-import com.sales.shopapp.dto.ProductDto;
-import com.sales.shopapp.dto.ProductImageDto;
+import com.sales.shopapp.dto.request.ProductDto;
+import com.sales.shopapp.dto.request.ProductImageDto;
 import com.sales.shopapp.entity.Product;
 import com.sales.shopapp.entity.ProductImage;
 import com.sales.shopapp.response.ProductListResponse;
@@ -10,6 +10,7 @@ import com.sales.shopapp.response.ProductResponse;
 import com.sales.shopapp.service.implement.IProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -73,7 +74,7 @@ public class ProductController {
                     return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
                             .body("File is too large! Maximum size is 10MB");
                 }
-                if (!isImagesFile(file)) {
+                if (!isImageFile(file)) {
                     return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
                             .body("File must be an image");
                 }
@@ -87,7 +88,7 @@ public class ProductController {
                 );
                 productImages.add(productImage);
             }
-            return ResponseEntity.ok().body(productImages);
+            return new ResponseEntity<>("Upload product images successfully", HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -98,7 +99,7 @@ public class ProductController {
             @RequestParam("page") int page,
             @RequestParam("limit") int limit
     ) {
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createdTime").descending());
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("productId").ascending());
         Page<ProductResponse> productsPage = productService.getAllProducts(pageRequest);
         int totalPages = productsPage.getTotalPages();
         List<ProductResponse> products = productsPage.getContent();
@@ -108,6 +109,24 @@ public class ProductController {
                 .productResponseList(products)
                 .totalPages(totalPages)
                 .build()));
+    }
+
+    @GetMapping("/images/{imageName}")
+    public ResponseEntity<?> viewImage(@PathVariable String imageName) {
+        try {
+            java.nio.file.Path imagePath = Paths.get("uploads/"+imageName);
+            UrlResource resource = new UrlResource(imagePath.toUri());
+
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -123,7 +142,7 @@ public class ProductController {
             throws Exception {
         Product updatedProduct = productService.updateProduct(productId, productDto);
         return ResponseEntity.ok("Update product successfully with product id: " + productId
-                + ", category id: " + productDto.getCategoryId());
+                + ", category id: " + updatedProduct.getCategoryId());
     }
 
     @PutMapping("/uploads/{id}")
@@ -145,7 +164,7 @@ public class ProductController {
     }
 
     private String storeFile(MultipartFile file) throws IOException {
-        if (!isImagesFile(file) || file.getOriginalFilename() == null) {
+        if (!isImageFile(file) || file.getOriginalFilename() == null) {
             throw new IOException("Invalid image format");
         }
         String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
@@ -159,7 +178,7 @@ public class ProductController {
         return uniqueFilename;
     }
 
-    private boolean isImagesFile(MultipartFile file) {
+    private boolean isImageFile(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && contentType.startsWith("image/");
     }

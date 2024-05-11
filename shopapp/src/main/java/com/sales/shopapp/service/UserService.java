@@ -1,15 +1,16 @@
 package com.sales.shopapp.service;
 
 import com.sales.shopapp.component.JwtTokenUtil;
+import com.sales.shopapp.constant.Roles;
 import com.sales.shopapp.dto.request.UserDto;
 import com.sales.shopapp.entity.Role;
 import com.sales.shopapp.exception.DataNotFoundException;
-import com.sales.shopapp.enums.RoleEnum;
 import com.sales.shopapp.entity.User;
 import com.sales.shopapp.exception.PermissionDeniedException;
 import com.sales.shopapp.repository.RoleRepository;
 import com.sales.shopapp.repository.UserRepository;
 import com.sales.shopapp.service.implement.IUserService;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -34,6 +35,7 @@ public class UserService implements IUserService {
     AuthenticationManager authenticationManager;
 
     @Override
+    @Transactional
     public User createUser(UserDto userDto) throws Exception {
         String phoneNumber = userDto.getPhoneNumber();
         if (userRepository.existsByPhoneNumber(phoneNumber)) {
@@ -50,7 +52,7 @@ public class UserService implements IUserService {
                 .build();
         Role role = roleRepository.findById(userDto.getRoleId())
                 .orElseThrow(() -> new DataNotFoundException("Role not found"));
-        if(role.getName().toUpperCase().equals(RoleEnum.ADMIN.toString())){
+        if(role.getName().equalsIgnoreCase(Roles.ADMIN)){
             throw new PermissionDeniedException("You cannot register an admin account");
         }
         newUser.setRoleId(role);

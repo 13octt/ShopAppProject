@@ -1,21 +1,20 @@
 package com.sales.shopapp.service;
 
-import com.sales.shopapp.dto.OrderDto;
+import com.sales.shopapp.dto.request.OrderDto;
 import com.sales.shopapp.entity.Order;
 import com.sales.shopapp.entity.OrderStatus;
 import com.sales.shopapp.entity.User;
 import com.sales.shopapp.exception.DataNotFoundException;
 import com.sales.shopapp.repository.OrderRepository;
 import com.sales.shopapp.repository.UserRepository;
-import com.sales.shopapp.response.OrderResponse;
 import com.sales.shopapp.service.implement.IOrderService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,7 @@ public class OrderService implements IOrderService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public Order createOrder(OrderDto orderDto) throws Exception {
         User user = userRepository.findById(orderDto.getUserId()).orElseThrow(() ->
                 new DataNotFoundException("Cannot find user with id: " + orderDto.getUserId()));
@@ -70,6 +70,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElse(null);
         // soft-delete

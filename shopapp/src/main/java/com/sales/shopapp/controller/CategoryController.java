@@ -1,6 +1,6 @@
 package com.sales.shopapp.controller;
 
-import com.sales.shopapp.dto.CategoryDto;
+import com.sales.shopapp.dto.request.CategoryDto;
 import com.sales.shopapp.entity.Category;
 import com.sales.shopapp.service.CategoryService;
 import jakarta.validation.Valid;
@@ -23,12 +23,9 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("")
-    public ResponseEntity<String> getAllCategories(
-            @RequestParam("page") int page,
-            @RequestParam("limit") int limit
-    ) {
+    public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categoriesList = categoryService.getAllCategory();
-        return ResponseEntity.ok(categoriesList.toString());
+        return ResponseEntity.ok(categoriesList);
     }
 
     @PostMapping("")
