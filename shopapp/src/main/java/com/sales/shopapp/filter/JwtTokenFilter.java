@@ -47,10 +47,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             if (isBypassToken(request)) {
                 filterChain.doFilter(request, response); //enable bypass
+                return;
             } else {
-                String authHeader = request.getHeader("Authorization");
+                final String authHeader = request.getHeader("Authorization");
                 if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "authHeader null or not started with Bearer");
                     return;
                 }
                 String token = authHeader.substring(7);
@@ -83,7 +84,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Pair.of(String.format("%s/categories", apiPrefix), "GET"),
                 Pair.of(String.format("%s/users/register", apiPrefix), "POST"),
                 Pair.of(String.format("%s/users/login", apiPrefix), "POST"),
-                Pair.of(String.format("%s/roles", apiPrefix), "GET")
+                Pair.of(String.format("%s/roles", apiPrefix), "GET"),
+                Pair.of(String.format("%s/actuator/health", apiPrefix), "GET"),
+                Pair.of(String.format("%s/actuator/info", apiPrefix), "GET"),
+                Pair.of(String.format("%s/healthcheck/health", apiPrefix), "GET"),
+                Pair.of(String.format("%s/test", apiPrefix), "GET"),
+                Pair.of("actuator", "GET")
         );
 
         for (Pair<String, String> bypassToken : byPassTokens) {

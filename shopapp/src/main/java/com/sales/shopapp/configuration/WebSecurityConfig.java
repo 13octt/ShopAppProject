@@ -10,10 +10,12 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -29,6 +31,7 @@ import static org.springframework.http.HttpMethod.*;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebMvc
+@EnableWebSecurity
 @EnableMethodSecurity
 @Getter
 @Setter
@@ -43,6 +46,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -60,8 +64,27 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
                                 String.format("%s/users/register", apiPrefix),
-                                String.format("%s/users/login", apiPrefix)
+                                String.format("%s/users/login", apiPrefix),
+                                String.format("%s/healthcheck/**", apiPrefix),
+                                String.format("%s/actuator/health", apiPrefix),
+                                String.format("%s/actuator/info", apiPrefix),
+                                "actuator/**",
+                                "test/**"
+                                //swagger
+                                //"/v3/api-docs",
+                                //"/v3/api-docs/**",
+//                                "/api-docs",
+//                                "/api-docs/**",
+//                                "/swagger-resources",
+//                                "/swagger-resources/**",
+//                                "/configuration/ui",
+//                                "/configuration/security",
+//                                "/swagger-ui/**",
+//                                "/swagger-ui.html",
+//                                "/webjars/swagger-ui/**",
+//                                "/swagger-ui/index.html"
                         ).permitAll()
+                        .requestMatchers(String.format("%s/actuator/**", apiPrefix)).hasRole("ACTUATOR_ADMIN")
                         .requestMatchers(GET, String.format("%s/roles**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/categories**", apiPrefix)).permitAll()
                         .requestMatchers(POST, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
@@ -73,6 +96,7 @@ public class WebSecurityConfig {
                         .requestMatchers(POST, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
                         .requestMatchers(PUT, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
                         .requestMatchers(DELETE, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
+                        .requestMatchers(GET, String.format("%s/products**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/products/**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/products/images/*", apiPrefix)).permitAll()
                         .requestMatchers(POST, String.format("%s/products**", apiPrefix)).hasAnyRole(Roles.USER) // admin
@@ -88,6 +112,7 @@ public class WebSecurityConfig {
                         .requestMatchers(DELETE, String.format("%s/order_details/**", apiPrefix)).hasRole(Roles.ADMIN)
                         .anyRequest().authenticated()
                 );
+        http.securityMatcher(String.valueOf(EndpointRequest.toAnyEndpoint()));
         return http.build();
     }
 }

@@ -16,10 +16,8 @@ import java.util.List;
 @RequestMapping("${api.prefix}/categories")
 @RequiredArgsConstructor
 
-//@Validated
 public class CategoryController {
 
-    // Dependency Injection
     private final CategoryService categoryService;
 
     @GetMapping("")

@@ -2,6 +2,7 @@ package com.sales.shopapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -12,28 +13,29 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long productId;
+    Long productId;
 
     @Column(name = "name", nullable = false, length = 350)
-    private String name;
+    String name;
 
     @Column(name = "price")
-    private float price;
+    float price;
 
     @Column(name = "thumbnail", length = 300)
-    private String thumbnail;
+    String thumbnail;
 
     @Column(name = "description")
-    private String description;
+    String description;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category categoryId;
+    Category categoryId;
 
     @OneToMany(mappedBy = "productId", cascade = CascadeType.REMOVE)
-    private List<ProductImage> images;
+    List<ProductImage> images;
 }

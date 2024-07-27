@@ -6,15 +6,18 @@ import com.sales.shopapp.exception.DataNotFoundException;
 import com.sales.shopapp.response.OrderDetailResponse;
 import com.sales.shopapp.service.OrderDetailService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.prefix}/order-details")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderDetailController {
-    private final OrderDetailService orderDetailService;
+    OrderDetailService orderDetailService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderDetail(

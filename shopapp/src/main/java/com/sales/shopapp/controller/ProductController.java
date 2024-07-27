@@ -9,7 +9,9 @@ import com.sales.shopapp.response.ProductListResponse;
 import com.sales.shopapp.response.ProductResponse;
 import com.sales.shopapp.service.implement.IProductService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,8 +34,9 @@ import java.util.*;
 @RestController
 @RequestMapping("${api.prefix}/products")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductController {
-    private final IProductService productService;
+    IProductService productService;
 
     @PostMapping("")
     public ResponseEntity<?> createProduct(
@@ -53,6 +56,8 @@ public class ProductController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 
     @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadImages(
@@ -95,39 +100,40 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<ProductListResponse>> getProducts(
-            @RequestParam("page") int page,
-            @RequestParam("limit") int limit
+    public ResponseEntity<ProductListResponse> getProducts(
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0", name = "category_id") Long categoryId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int limit
     ) {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("productId").ascending());
-        Page<ProductResponse> productsPage = productService.getAllProducts(pageRequest);
-        int totalPages = productsPage.getTotalPages();
-        List<ProductResponse> products = productsPage.getContent();
-
-        return ResponseEntity.ok(Collections.singletonList(ProductListResponse
+        Page<ProductResponse> productPage = productService.getAllProducts(keyword, categoryId, pageRequest);
+        int totalPages = productPage.getTotalPages();
+        List<ProductResponse> products = productPage.getContent();
+        return ResponseEntity.ok(ProductListResponse
                 .builder()
                 .productResponseList(products)
                 .totalPages(totalPages)
-                .build()));
+                .build());
     }
 
-    @GetMapping("/images/{imageName}")
-    public ResponseEntity<?> viewImage(@PathVariable String imageName) {
-        try {
-            java.nio.file.Path imagePath = Paths.get("uploads/"+imageName);
-            UrlResource resource = new UrlResource(imagePath.toUri());
-
-            if (resource.exists()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .body(resource);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @GetMapping("/images/{imageName}")
+//    public ResponseEntity<?> viewImage(@PathVariable String imageName) {
+//        try {
+//            java.nio.file.Path imagePath = Paths.get("uploads/" + imageName);
+//            UrlResource resource = new UrlResource(imagePath.toUri());
+//
+//            if (resource.exists()) {
+//                return ResponseEntity.ok()
+//                        .contentType(MediaType.IMAGE_JPEG)
+//                        .body(resource);
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductsById(@PathVariable("id") Long productId) throws Exception {
@@ -208,5 +214,24 @@ public class ProductController {
         return ResponseEntity.ok("Fake Products created successfully");
     }
 
+
+    @GetMapping("/images/{imageName}")
+    public ResponseEntity<?> viewImage(@PathVariable String imageName) {
+        try {
+            java.nio.file.Path imagePath = Paths.get("uploads/" + imageName);
+            UrlResource resource = new UrlResource(imagePath.toUri());
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(new UrlResource(Paths.get("uploads/not_found.jpg").toUri()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
 

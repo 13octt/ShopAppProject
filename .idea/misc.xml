@@ -16,6 +16,13 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/shopapp/pom.xml" />
+        <option value="$PROJECT_DIR$/../service-reg/pom.xml" />
+        <option value="$PROJECT_DIR$/../identity-serivce/identity-serivce/pom.xml" />
+        <option value="$PROJECT_DIR$/../identity-serivce/identity-service/pom.xml" />
+        <option value="$PROJECT_DIR$/configserver/pom.xml" />
+        <option value="$PROJECT_DIR$/identity-service/pom.xml" />
+        <option value="$PROJECT_DIR$/service-reg/pom.xml" />
+        <option value="$PROJECT_DIR$/../configserver/pom.xml" />
       </list>
     </option>
   </component>
