@@ -1,6 +1,7 @@
 package com.sales.shopapp.controller;
 
 import com.sales.shopapp.dto.request.CategoryDto;
+import com.sales.shopapp.dto.response.CategoryResponse;
 import com.sales.shopapp.entity.Category;
 import com.sales.shopapp.service.CategoryService;
 import jakarta.validation.Valid;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("${api.prefix}/categories")
 @RequiredArgsConstructor
-
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -39,7 +39,12 @@ public class CategoryController {
                 return ResponseEntity.badRequest().body(errorMessage);
             }
             categoryService.createCategory(categoryDto);
-            return ResponseEntity.ok("Product create successfully");
+            return ResponseEntity.ok(
+                    CategoryResponse.builder()
+                            .name(categoryDto.getName())
+                            .message("Product Create Successfully")
+                            .build()
+            );
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

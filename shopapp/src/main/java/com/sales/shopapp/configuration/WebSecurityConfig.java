@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -69,33 +68,30 @@ public class WebSecurityConfig {
                                 String.format("%s/actuator/health", apiPrefix),
                                 String.format("%s/actuator/info", apiPrefix),
                                 "actuator/**",
-                                "test/**"
+                                "test/**",
                                 //swagger
-                                //"/v3/api-docs",
-                                //"/v3/api-docs/**",
-//                                "/api-docs",
-//                                "/api-docs/**",
-//                                "/swagger-resources",
-//                                "/swagger-resources/**",
-//                                "/configuration/ui",
-//                                "/configuration/security",
-//                                "/swagger-ui/**",
-//                                "/swagger-ui.html",
-//                                "/webjars/swagger-ui/**",
-//                                "/swagger-ui/index.html"
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/api-docs",
+                                "/api-docs/**",
+                                "/swagger-resources",
+                                "/swagger-resources/**",
+                                "/configuration/ui",
+                                "/configuration/security",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/webjars/swagger-ui/**",
+                                "/swagger-ui/index.html"
                         ).permitAll()
                         .requestMatchers(String.format("%s/actuator/**", apiPrefix)).hasRole("ACTUATOR_ADMIN")
                         .requestMatchers(GET, String.format("%s/roles**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/categories**", apiPrefix)).permitAll()
-                        .requestMatchers(POST, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
+                        .requestMatchers(POST, String.format("%s/categories**", apiPrefix)).hasRole(Roles.ADMIN)
                         .requestMatchers(PUT, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
                         .requestMatchers(DELETE, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
                         .requestMatchers(GET, String.format("%s/products**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/roles**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/categories**", apiPrefix)).permitAll()
-                        .requestMatchers(POST, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
-                        .requestMatchers(PUT, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
-                        .requestMatchers(DELETE, String.format("%s/categories/**", apiPrefix)).hasAnyRole(Roles.ADMIN)
                         .requestMatchers(GET, String.format("%s/products**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/products/**", apiPrefix)).permitAll()
                         .requestMatchers(GET, String.format("%s/products/images/*", apiPrefix)).permitAll()
@@ -112,7 +108,8 @@ public class WebSecurityConfig {
                         .requestMatchers(DELETE, String.format("%s/order_details/**", apiPrefix)).hasRole(Roles.ADMIN)
                         .anyRequest().authenticated()
                 );
-        http.securityMatcher(String.valueOf(EndpointRequest.toAnyEndpoint()));
+
+//        http.securityMatcher(String.valueOf(EndpointRequest.toAnyEndpoint()));
         return http.build();
     }
 }
