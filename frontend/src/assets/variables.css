@@ -1,0 +1,7 @@
+:root {
+	/* --background-color: linear-gradient(rgb(14, 17, 36), rgb(36, 26, 73)); */
+	--default-text-color: white;
+	--header-color: rgb(173, 178, 203);
+	--background-color: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(75,75,171,1) 42%, rgba(0,212,255,1) 100%);
+	
+}
