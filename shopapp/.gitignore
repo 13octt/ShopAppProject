@@ -32,6 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-.idea/sonarlint
-.idea/jpa-buddy.xml
-.idea/uiDesigner.xml
+.idea/
